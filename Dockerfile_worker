@@ -1,0 +1,11 @@
+FROM python:3.10-alpine
+WORKDIR /app
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install --no-dev --no-root
+COPY src/broker.py src/config.py src/worker.py ./
+COPY entrypoint_worker.sh ./
+RUN chmod +x ./entrypoint_worker.sh
+ENTRYPOINT [ "./entrypoint_worker.sh" ]
+CMD ["python", "worker.py"]

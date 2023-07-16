@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  rabbit:
+    image: rabbitmq:3.12
+    env_file:
+      - .env
+  sender:
+    build:
+      context: .
+      dockerfile: Dockerfile_sender
+    image: sender
+    env_file:
+      - .env
+    depends_on:
+      - rabbit
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile_worker
+    restart: always
+    image: worker
+    env_file:
+      - .env
+    depends_on:
+      - rabbit
+  receiver:
+    build:
+      context: .
+      dockerfile: Dockerfile_receiver
+    image: receiver
+    env_file:
+      - .env
+    depends_on:
+      - rabbit
+  server:
+    image: nginx:1.24
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - sender
+      - receiver

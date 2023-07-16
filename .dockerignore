@@ -1,0 +1,7 @@
+__pycache__/
+.git/
+.vscode/
+.gitignore
+.env
+.dockerignore
+sadko/media/
