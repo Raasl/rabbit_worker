@@ -4,4 +4,3 @@ __pycache__/
 .gitignore
 .env
 .dockerignore
-sadko/media/
